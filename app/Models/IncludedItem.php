@@ -16,4 +16,9 @@ class IncludedItem extends Model
         return $query->where('status', 'ACTIVE')
             ->select('id','items_description_included');
     }
+
+    public function scopeGetById($query, $id){
+        return $query->where('status', 'ACTIVE')
+            ->where('id', $id)->first();
+    }
 }

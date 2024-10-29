@@ -64,8 +64,19 @@ function showCustomerLocation() {
 }
 
 function selectedBrand() {
-    // let brand = $("#brand").val();
-    // let channel = $("#channels").val();
+    let brand = $("#brand").val();
+    let channel = $("#channels").val();
+
+    // Displaying Mode of Refund
+    if (brand === "APPLE" || brand === "BEATS") {
+        // $("#bank_refund").attr("hidden", true);
+    } else if (!isEmptyOrSpaces(channel) && channel == 4) {
+        if (brand === "APPLE" || brand === "BEATS") {
+            // $("#bank_refund").attr("hidden", true);
+        } else {
+            // $("#bank_refund").attr("hidden", false);
+        }
+    }
 
     $.ajax({
         url: "/store-drop-off",
@@ -270,22 +281,6 @@ function validateForm() {
         { id: "#items_included", error: "#items_included_error" },
     ];
 
-    function isEmptyOrSpaces(str) {
-        // return !str || str.trim() === "";
-        return (str || "").trim().length === 0;
-    }
-
-    function validateField({ id, error, condition, validate, invalidMessage, customMessage }) {
-        const value = $(id).val();
-        const hasError = condition ? condition() && isEmptyOrSpaces(value) : isEmptyOrSpaces(value);
-
-        if (hasError || (validate && !validate(value))) {
-            $(error).attr("hidden", false).html(customMessage || invalidMessage || "");
-        } else {
-            $(error).attr("hidden", true).html("");
-        }
-    }
-
     fields.forEach(validateField);
 
     // Additional conditional checks
@@ -309,4 +304,21 @@ function validateForm() {
     }
 
     return true;
+}
+
+function isEmptyOrSpaces(str) {
+    // return !str || str.trim() === "";
+    // return (str || "").trim().length === 0;
+    return String(str || "").trim().length === 0;
+}
+
+function validateField({ id, error, condition, validate, invalidMessage, customMessage }) {
+    const value = $(id).val();
+    const hasError = condition ? condition() && isEmptyOrSpaces(value) : isEmptyOrSpaces(value);
+
+    if (hasError || (validate && !validate(value))) {
+        $(error).attr("hidden", false).html(customMessage || invalidMessage || "");
+    } else {
+        $(error).attr("hidden", true).html("");
+    }
 }

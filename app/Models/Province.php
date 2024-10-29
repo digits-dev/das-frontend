@@ -16,4 +16,8 @@ class Province extends Model
         return $query->select('provCode','provDesc')
             ->orderBy('provDesc','asc');
     }
+
+    public function scopeGetByCode($query, $provCode){
+        return $query->where('provCode',$provCode)->first();
+    }
 }

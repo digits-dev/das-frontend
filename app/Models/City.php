@@ -20,4 +20,8 @@ class City extends Model
         return $query->where('provCode',$province)
             ->orderBy('citymunDesc', 'ASC');
     }
+
+    public function scopeGetByCode($query, $citymunCode){
+        return $query->where('citymunCode', $citymunCode)->first();
+    }
 }

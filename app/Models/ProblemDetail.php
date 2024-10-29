@@ -16,4 +16,9 @@ class ProblemDetail extends Model
         return $query->where('status', 'ACTIVE')
             ->select('id','problem_details');
     }
+
+    public function scopeGetById($query, $id){
+        return $query->where('id', $id)
+            ->where('status', 'ACTIVE')->first();
+    }
 }

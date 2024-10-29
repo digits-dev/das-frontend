@@ -9,6 +9,11 @@ class WarrantyDistributionSerial extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
     protected $table = 'returns_serial';
+    protected $fillable = [
+        'returns_header_id',
+        'returns_body_item_id',
+        'serial_number',
+        'created_at'
+    ];
 }

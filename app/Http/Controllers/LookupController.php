@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Models\PaymentMode;
-use App\Models\Province;
 use App\Models\StoreDropOff;
 use App\Models\StoreMaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class LookupController extends Controller

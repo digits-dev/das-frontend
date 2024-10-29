@@ -12,9 +12,17 @@ class Channel extends Model
     protected $table = 'channels';
     protected $guarded = [];
 
+    const RETAIL = 6;
+
     public function scopeActive($query){
         return $query->where('channel_status', 'ACTIVE')
             ->select('id','channel_name')
             ->orderBy('channel_name', 'ASC');
+    }
+
+    public function scopeGetChannelById($query, $id){
+        return $query->where('id',$id)
+            ->where('channel_status','=','ACTIVE')
+            ->first();
     }
 }
