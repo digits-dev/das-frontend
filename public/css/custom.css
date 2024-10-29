@@ -1,0 +1,230 @@
+
+/** ADD YOUR AWESOME CODES HERE **/
+
+* {
+    box-sizing: border-box;
+}
+form.searchform input[type=text] {
+    padding: 10px;
+    font-size: 17px;
+    border: 1px solid grey;
+    float: left;
+    width: 80%;
+    background: #f1f1f1;
+}
+form.searchform button {
+    float: left;
+    width: 20%;
+    padding: 10px;
+    background: #d33b33;
+    color: white;
+    font-size: 17px;
+    border: 1px solid grey;
+    border-left: none;
+    cursor: pointer;
+}
+form.searchform button:hover {
+    background: black;
+}
+form.searchform::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+.search {
+    margin: auto;
+    width: 65%;
+}
+.title-homepage {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 4em;
+    color: #fff;
+    text-align: center;
+}
+.add-pr{
+    padding: 3rem .75rem 1rem;
+    text-align: center;
+}
+.create-form {
+    padding: 2rem;
+    background-color:white;
+}
+.review-form-box .form-control {
+    border: 1px solid #999 !important;
+}
+.capitalize {
+    text-transform: capitalize;
+}
+
+/*--thank you pop starts here--*/
+.thank-you-pop{
+    width:100%;
+    padding:20px;
+    text-align:center;
+}
+.thank-you-pop img{
+    width:76px;
+    height:auto;
+    margin:0 auto;
+    display:block;
+    margin-bottom:25px;
+}
+
+.thank-you-pop h1{
+    font-size: 42px;
+    margin-bottom: 25px;
+    color:#5C5C5C;
+}
+.thank-you-pop p{
+    font-size: 17px;
+    margin-bottom: 27px;
+    color:#5C5C5C;
+}
+.thank-you-pop h3.cupon-pop{
+    font-size: 25px;
+    margin-bottom: 40px;
+    color:#222;
+    display:inline-block;
+    text-align:center;
+    padding:10px 20px;
+    border:2px dashed #222;
+    clear:both;
+    font-weight:normal;
+}
+.thank-you-pop h3.cupon-pop span{
+    color:#03A9F4;
+}
+.thank-you-pop a{
+    display: inline-block;
+    margin: 0 auto;
+    padding: 9px 20px;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 14px;
+    background-color: #8BC34A;
+    border-radius: 17px;
+}
+.thank-you-pop a i{
+    margin-right:5px;
+    color:#fff;
+}
+#ignismyModal .modal-header{
+    border:0px;
+}
+
+.limitedNumbChosen, .limitedNumbSelect2{
+    width: 100% !important;
+}
+
+.select2-container--default .select2-selection--multiple {
+    background-color: white;
+    border: 1px solid #999 !important;
+    border-radius: 0px !important;
+    cursor: text;
+}
+
+.select2-container .select2-selection--multiple {
+    min-height: 40px !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    margin-top: 7px !important;
+}
+
+.select2-container--default .select2-results__option[aria-selected=true] {
+    background-color:  white !important;
+    pointer-events: none;
+    opacity:0.5;
+}
+
+.button-create {
+    padding: 1rem 3rem;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    margin-right: 5px !important;
+}
+
+/* .mb-0, .my-0 {
+    display: flex !important;
+    align-items: center !important;
+    height: 30px !important;
+    margin-bottom: 2px !important;
+    line-height: 1;
+} */
+
+.searchform {
+    margin: 0 30px;
+    width: 50%;
+    place-content: center;
+}
+
+.wishlist-box-main {
+    margin: 0 30px;
+    width: 50%;
+    place-content: center;
+}
+
+@media (max-width: 361px){
+    body {
+        font-size: 0.83em !important;
+    }
+}
+
+@media (min-width: 362px){
+    body {
+        font-size: 1em !important;
+    }
+}
+
+@media (max-width: 430px){
+    .button-create {
+        font-size: 1em !important;
+    }
+}
+
+@media (min-width: 431px){
+    .button-create {
+        font-size: 1.30rem !important;
+    }
+}
+
+@media (max-width: 500px){
+    .create-form {
+        margin: 0 -45px;
+    }
+}
+
+@media (max-width: 767px){
+
+    .navbar-light .navbar-toggler {
+        display: none !important;
+    }
+
+    .main-header {
+        display: none !important;
+    }
+    .DesktopView {
+        display: none !important;
+    }
+
+    .create-form {
+        margin-top: 40px !important;
+    }
+
+    .searchform {
+        width: 80% !important;
+    }
+
+    .wishlist-box-main {
+        margin: 0 10px !important;
+        width: unset !important;
+    }
+}
+
+@media (max-width: 991px) and (min-width: 768px) {
+    .navbar-light .navbar-toggler {
+        display: none !important;
+    }
+}
