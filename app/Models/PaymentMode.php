@@ -16,4 +16,11 @@ class PaymentMode extends Model
         return $query->where('status', 'ACTIVE')
             ->select('id','mode_of_payment');
     }
+
+    public function scopeGetById($query, $id){
+        return $query->whereIn('id', json_decode($id))
+            ->where('status', 'ACTIVE')
+            ->select('id','mode_of_refund')
+            ->orderBy('mode_of_refund', 'ASC');
+    }
 }

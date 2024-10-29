@@ -100,7 +100,7 @@
                         <span class="requiredField">*</span>
                         <label class="mb-0" for="problem_details">Problem Details</label>
                         <select data-placeholder="Choose problem details here..." id="problem_details"
-                            name="problem_details[]" id="ProblemDetail" onchange="OtherProblemDetail()"
+                            name="problem_details[]" onchange="otherProblemDetail()"
                             class="form-control limitedNumbSelect2" style="width:100%;" multiple="true" required>
                             @foreach ($result['problem_details'] as $key => $problem_detail)
                                 <option value="{{ $problem_detail->id }}">{{ $problem_detail->problem_details }}
@@ -125,7 +125,7 @@
                         <span class="requiredField">*</span>
                         <label class="mb-0" for="items_included">Items Included</label>
                         <select data-placeholder="Choose items included here..." id="items_included"
-                            name="items_included[]" id="items_included" onchange="OtherItemsIncluded()"
+                            name="items_included[]" onchange="otherItemsIncluded()"
                             class="form-control limitedNumbSelect2" style="width:100%;" multiple="true" required>
                             @foreach ($result['items_included'] as $key => $item_included)
                                 <option value="{{ $item_included->id }}">
@@ -313,7 +313,7 @@
                         <label class="mb-0" for="payment">Original Mode of Payment</label>
                         <!-- Original Mode of Payment -->
                         <select data-placeholder="Choose mode of payment here..." name="payment[]" id="payment"
-                            onchange="Selected_Mode_Of_Payment()" class="form-control limitedNumbSelect2"
+                            onchange="selectedModeOfPayment()" class="form-control limitedNumbSelect2"
                             style="width:100%;" multiple="true" required>
                             @foreach ($result['mode_of_payment'] as $key => $payment)
                                 <option value="{{ $payment->id }}">{{ $payment->mode_of_payment }}</option>
@@ -327,7 +327,7 @@
                         <label class="mb-0" for="purchase_amount">Purchase Amount</label>
                         <!-- Purchase Amount -->
                         <input type="text" class="form-control" style="height:40px;" name="purchase_amount"
-                            id="purchase_amount" oninput="ValidatePurchaseAmount()" MaxLength="12"
+                            id="purchase_amount" oninput="validatePurchaseAmount()" MaxLength="12"
                             placeholder="Purchase Amount" required>
                         <span class="error-content" id="purchase_amount_error"></span>
                     </div>
@@ -429,7 +429,7 @@
 
             $(document).on('click', '#submit', function(e){
                 e.preventDefault();
-                var validated = ValidateForm();
+                var validated = validateForm();
                 if(validated){
                     $('#confirm-submit').modal('show');
                 }

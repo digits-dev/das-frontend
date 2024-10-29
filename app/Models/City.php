@@ -11,4 +11,13 @@ class City extends Model
 
     protected $table = 'refcitymun';
     protected $guarded = [];
+
+    public function scopeGetAll($query){
+        return $query->orderBy('citymunDesc', 'ASC');
+    }
+
+    public function scopeGetByProvince($query, $province){
+        return $query->where('provCode',$province)
+            ->orderBy('citymunDesc', 'ASC');
+    }
 }

@@ -39,6 +39,13 @@ class StoreDropOff extends Model
             ->orderBy('branch_id', 'ASC');
     }
 
+    public function scopeGetBranchDropOffById($query, $storeFront){
+        return $query->where('channels_id', '!=', 7)
+            ->where('stores_frontend_id', $storeFront)
+            ->where('store_status', 'ACTIVE')
+            ->orderBy('branch_id', 'ASC');
+    }
+
     public function frontend():BelongsTo{
         return $this->belongsTo(StoreMaster::class,'stores_frontend_id','id');
     }

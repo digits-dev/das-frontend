@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
+use App\Models\PaymentMode;
+use App\Models\Province;
 use App\Models\StoreDropOff;
 use App\Models\StoreMaster;
 use Illuminate\Http\Request;
@@ -55,11 +58,40 @@ class LookupController extends Controller
                 return StoreMaster::getByName($request->location, $request->drop_off_store)->select('id')->first();
             });
 
-            $storeBackend = StoreDropOff::getBackendStoresById($storeId->id)->get();
-            return response()->json($storeBackend);
+            if($storeId->id){
+                $storeBranchDrop = StoreDropOff::getBranchDropOffById($storeId->id)->get();
+                return response()->json($storeBranchDrop);
+            }
+
+            $storeBranchDrop = StoreDropOff::getBranchDropOffById($storeId->id)->where('store_dropoff_privilege', 'YES')->get();
+            return response()->json($storeBranchDrop);
         }
 
-        $storeBackend = StoreDropOff::getBackendStores()->get();
-        return response()->json($storeBackend);
+        $storeBranchDrop = StoreDropOff::getBackendStores()->get();
+        return response()->json($storeBranchDrop);
+    }
+
+    public function getCity(Request $request){
+        Log::debug('get-city'.json_encode($request->provinces));
+        $city = Cache::remember('city'.$request->provinces, now()->addDays(1), function() use ($request){
+            if($request->provinces){
+                return City::getByProvince($request->provinces)->get();
+            }
+            return City::getAll()->get();
+        });
+
+        return response()->json($city);
+    }
+
+    public function getRefundMode(Request $request){
+        Log::debug('get-refund-mode'.json_encode($request->mode_of_refund));
+        $refundMode = Cache::remember('get-refund-mode'.$request->mode_of_refund, now()->addDays(1), function() use ($request){
+            if($request->mode_of_refund){
+                return PaymentMode::getById($request->mode_of_refund)->get();
+            }
+            return PaymentMode::getAll()->get();
+        });
+
+        return response()->json($refundMode);
     }
 }
