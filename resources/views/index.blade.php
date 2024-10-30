@@ -135,6 +135,62 @@
             </div>
         </div>
     </div>
+
+    <!-- Start of Modal -->
+    <div class="modal fade" id="myModal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                        style="float:right;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="thank-you-pop">
+                        <img src="{{ asset('images/Green-Round-Tick.png') }}" alt="">
+                        <h3 style="font-size:21px;font-weight:600;">
+                            Your Warranty Request is now being processed!
+                        </h3>
+                        <p>
+                            @if ($tracking = Session::get('tracking'))
+                                @if ($tracking->purchase_location == "RETAIL STORE" && $tracking->mode_of_return == "STORE DROP-OFF")
+                                    You may proceed to the store to drop-off your item. Please bring the
+                                    original
+                                    packaging and its included accessories.
+                                @else
+                                    Please check your email for a copy of your request. A representative will
+                                    reach
+                                    out to you in a few days to process your concern.
+                                @endif
+                            @endif
+                        </p>
+                        <h3 class="cupon-pop">{{ Session::get('success') }}</h3>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="{{ URL::to('/') }}"><button type="button" class="btn hvr-hover"
+                            style="color:white; background-color:#3C8DBC;">Go Back To Home</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of Modal -->
+
+    @if (Session::has('success'))
+        <script>
+            $(function() {
+                $('#myModal').modal('show');
+            });
+        </script>
+    @endif
+
+    @if (Session::has('failed'))
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <strong>Failed to Submit. {{ Session::get('failed') }}</strong>
+        </div>
+    @endif
 </div>
 
 @include('partials.footer')

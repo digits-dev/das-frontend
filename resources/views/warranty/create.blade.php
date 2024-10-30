@@ -3,62 +3,68 @@
     <div class="search" style="padding-bottom: 40px;">
         <h1 class="title-homepage DesktopView" style="font-size: 45px;"><strong>Create A Warranty Request</strong></h1>
         <div class="create-form">
-            <a href="{{ URL::to('/') }}" class="DesktopView"><i class="fa fa-arrow-left" aria-hidden="true"
+            <a href="{{ url('/') }}" class="DesktopView"><i class="fa fa-arrow-left" aria-hidden="true"
                     style="font-size: 2em;color:dimgray;"></i></a>
 
-            <!-- Start of Modal -->
-            <div class="modal fade" id="myModal" role="dialog" aria-hidden="true">
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
+
+                        <!-- Modal Header -->
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                                style="float:right;">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
+
+                        <!-- Modal Body -->
                         <div class="modal-body">
-                            <div class="thank-you-pop">
-                                <img src="{{ asset('images/Green-Round-Tick.png') }}" alt="">
-                                <h3 style="font-size:21px;font-weight:600;">
+                            <div class="thank-you-pop text-center">
+                                <img src="{{ asset('images/Green-Round-Tick.png') }}" alt="Success Icon">
+                                <h3 class="font-weight-bold" style="font-size:21px;">
                                     Your Warranty Request is now being processed!
                                 </h3>
                                 <p>
-                                    @if (!empty(session('tracking')))
-                                        @if (session('tracking')->purchase_location == 'RETAIL STORE' && session('tracking')->mode_of_return == 'STORE DROP-OFF')
-                                            You may proceed to the store to drop-off your item. Please bring the
-                                            original
-                                            packaging and its included accessories.
+                                    @if ($tracking = session('tracking'))
+                                        @if ($tracking->purchase_location == "RETAIL STORE" && $tracking->mode_of_return == "STORE DROP-OFF")
+                                            You may proceed to the store to drop-off your item. Please bring the original packaging and included accessories.
                                         @else
-                                            Please check your email for a copy of your request. A representative will
-                                            reach
-                                            out to you in a few days to process your concern.
+                                            Please check your email for a copy of your request. A representative will reach out to you in a few days to process your concern.
                                         @endif
                                     @endif
                                 </p>
                                 <h3 class="cupon-pop">{{ session('success') }}</h3>
                             </div>
                         </div>
+
+                        <!-- Modal Footer -->
                         <div class="modal-footer">
-                            <a href="{{ URL::to('/') }}"><button type="button" class="btn hvr-hover"
-                                    style="color:white; background-color:#3C8DBC;">Go Back To Home</button></a>
+                            <a href="{{ url('/') }}" class="btn hvr-hover" style="color:white; background-color:#3C8DBC;">
+                                Go Back To Home
+                            </a>
                         </div>
+
                     </div>
                 </div>
             </div>
-            <!-- End of Modal -->
 
-            @if ($message = Session::get('success'))
-                <script>
-                    $(function() {
-                        $('#myModal').modal('show');
-                    });
-                </script>
+
+            @if (session('success'))
+                @push('bottom')
+                    <script>
+                        $(document).ready(function() {
+                            $('#myModal').modal('show');
+                        });
+                    </script>
+                @endpush
             @endif
 
-            @if ($message = Session::get('failed'))
-                <div class="alert alert-danger">
-                    <button type="button" class="close" data-dismiss="alert">x</button>
+            @if (session('failed'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <strong>Failed to Submit. {{ session('failed') }}</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
             @endif
 
@@ -429,7 +435,7 @@
 
             $(document).on('click', '#submit', function(e){
                 e.preventDefault();
-                var validated = validateForm();
+                let validated = validateForm();
                 if(validated){
                     $('#confirm-submit').modal('show');
                 }

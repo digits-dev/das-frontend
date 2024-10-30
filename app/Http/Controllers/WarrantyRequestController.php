@@ -88,7 +88,7 @@ class WarrantyRequestController extends Controller
             'digits_code' => 'required', // 9-digit numeric code
             'item_desc' => 'required|string|max:255',
             'brand' => 'required|string|max:50',
-            'serial_number' => 'required|string|max:50',
+            'serial_number' => 'nullable|string|max:50',
             'problem_details' => 'required|array|min:1',
             'items_included' => 'required|array|min:1',
             'items_included_others' => 'nullable|string|max:255',
@@ -108,7 +108,7 @@ class WarrantyRequestController extends Controller
             'country' => 'required|string|in:Philippines',
             'email_address' => 'required|email|max:100',
             'contact_number' => 'required|regex:/^09\d{9}$/',
-            'order_no' => 'required|alpha_num|max:50',
+            'order_no' => 'required|string|max:50',
             'purchase_date' => 'required|date|before:today',
             'payment' => 'required|array|min:1',
             'purchase_amount' => 'required|numeric|min:0',
@@ -237,40 +237,49 @@ class WarrantyRequestController extends Controller
             try {
                 DB::connection('backend')->beginTransaction();
                 $warrantyBackend = WarrantyBackend::firstOrCreate([
-                    'order_no' => $dataHeader['order_no']
+                    'order_no' => $dataHeader['order_no'],
+                    'email_address' => $dataHeader['email_address'],
+                    'contact_no' => $dataHeader['contact_no'],
                 ], $dataHeader);
 
                 $warrantyBackendLine = $warrantyBackend->lines()->firstOrCreate([
                     'digits_code' => $dataLines['digits_code']
                 ], $dataLines);
 
-                $warrantyBackendLine->serials()->firstOrCreate([
-                    'serial_number' => $request->serial_number
-                ],[
-                    'returns_header_id' => $warrantyBackend->id,
-                    'serial_number' => $request->serial_number,
-                    'created_at' => now()
-                ]);
+                if(!empty($request->serial_number)){
+                    $warrantyBackendLine->serials()->firstOrCreate([
+                        'serial_number' => $request->serial_number
+                    ],[
+                        'returns_header_id' => $warrantyBackend->id,
+                        'serial_number' => $request->serial_number,
+                        'created_at' => now()
+                    ]);
+                }
 
                 DB::connection('backend')->commit();
 
                 DB::beginTransaction();
                 //frontend
+                $dataHeader['return_reference_no'] = $warrantyBackend->return_reference_no;
                 $warranty = Warranty::firstOrCreate([
-                    'order_no' => $dataHeader['order_no']
+                    'order_no' => $dataHeader['order_no'],
+                    'email_address' => $dataHeader['email_address'],
+                    'contact_no' => $dataHeader['contact_no'],
                 ], $dataHeader);
 
                 $warrantyLine = $warranty->lines()->firstOrCreate([
                     'digits_code' => $dataLines['digits_code']
                 ], $dataLines);
 
-                $warrantyLine->serials()->firstOrCreate([
-                    'serial_number' => $request->serial_number
-                ],[
-                    'returns_header_id' => $warranty->id,
-                    'serial_number' => $request->serial_number,
-                    'created_at' => now()
-                ]);
+                if(!empty($request->serial_number)){
+                    $warrantyLine->serials()->firstOrCreate([
+                        'serial_number' => $request->serial_number
+                    ],[
+                        'returns_header_id' => $warranty->id,
+                        'serial_number' => $request->serial_number,
+                        'created_at' => now()
+                    ]);
+                }
 
                 if (!$warrantyBackend->wasRecentlyCreated) {
                     $errorMessage[] = "Ref # {$warrantyBackend->return_reference_no} already exist in the system!";
@@ -290,9 +299,8 @@ class WarrantyRequestController extends Controller
             } catch (Exception $e) {
                 DB::connection('backend')->rollBack();
                 DB::rollBack();
-                dd($e);
                 Log::error($e->getMessage());
-                return back()->with('failed', 'Something went wrong!'.$e->getMessage());
+                return redirect()->back()->with('failed', 'Something went wrong!'.$e->getMessage());
             }
         }
         else{
@@ -300,7 +308,9 @@ class WarrantyRequestController extends Controller
                 DB::connection('backend')->beginTransaction();
 
                 $warrantyOnlineBackend = WarrantyOnlineBackend::firstOrCreate([
-                    'order_no' => $dataHeader['order_no']
+                    'order_no' => $dataHeader['order_no'],
+                    'email_address' => $dataHeader['email_address'],
+                    'contact_no' => $dataHeader['contact_no'],
                 ], $dataHeader);
 
                 $warrantyOnlineBackendLine = $warrantyOnlineBackend->lines()->firstOrCreate([
@@ -319,8 +329,11 @@ class WarrantyRequestController extends Controller
 
                 DB::beginTransaction();
                 //frontend
+                $dataHeader['return_reference_no'] = $warrantyOnlineBackend->return_reference_no;
                 $warrantyOnl = WarrantyOnline::firstOrCreate([
-                    'order_no' => $dataHeader['order_no']
+                    'order_no' => $dataHeader['order_no'],
+                    'email_address' => $dataHeader['email_address'],
+                    'contact_no' => $dataHeader['contact_no'],
                 ], $dataHeader);
 
                 $warrantyOnlLine = $warrantyOnl->lines()->firstOrCreate([
@@ -354,7 +367,7 @@ class WarrantyRequestController extends Controller
                 DB::connection('backend')->rollBack();
                 DB::rollBack();
                 Log::error($e->getMessage());
-                return back()->with('failed', 'Something went wrong!'.$e->getMessage());
+                return redirect()->back()->with('failed', 'Something went wrong!'.$e->getMessage());
             }
 
         }
@@ -363,7 +376,10 @@ class WarrantyRequestController extends Controller
             return back()->with('failed', implode(" ",$errorMessage));
         }
 
-        return back()->with('success', 'Your Reference Number is '.$refNum)->with('tracking', $warrantyTrx);
+        return back()->with([
+            'success'=>"Your Reference Number is {$refNum}",
+            'tracking'=>$warrantyTrx
+        ]);
 
     }
 
