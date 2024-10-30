@@ -56,7 +56,7 @@ class LookupController extends Controller
                 return StoreMaster::getByName($request->location, $request->drop_off_store)->select('id')->first();
             });
 
-            if($storeId->id){
+            if($storeId){
                 $storeBranchDrop = StoreDropOff::getBranchDropOffById($storeId->id)->get();
                 return response()->json($storeBranchDrop);
             }
