@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class WarrantyLine extends Model
+class WarrantyOnlineBackendLine extends Model
 {
     use HasFactory;
 
-    protected $table = 'returns_body_item_retail';
+    protected $connection = 'backend';
+    protected $table = 'returns_body_item';
     protected $fillable = [
         'returns_header_id',
         'digits_code',
@@ -26,7 +27,7 @@ class WarrantyLine extends Model
     ];
 
     public function serials():HasMany{
-        return $this->hasMany(SerialNumber::class, 'returns_body_item_id','id');
+        return $this->hasMany(WarrantyOnlineBackendSerial::class, 'returns_body_item_id','id');
     }
 
     public function item():BelongsTo{

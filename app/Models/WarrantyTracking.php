@@ -22,7 +22,7 @@ class WarrantyTracking extends Model
     }
 
     public function headerDistri():BelongsTo{
-        return $this->belongsTo(WarrantyDistribution::class,'return_reference_no','return_reference_no')->select(['return_reference_no']);
+        return $this->belongsTo(WarrantyOnline::class,'return_reference_no','return_reference_no')->select(['return_reference_no']);
     }
 
     public function status():BelongsTo{

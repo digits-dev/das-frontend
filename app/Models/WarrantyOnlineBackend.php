@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\DB;
 
-class Warranty extends Model
+class WarrantyOnlineBackend extends Model
 {
     use HasFactory;
 
-    protected $table = 'returns_header_retail';
+    protected $connection = 'backend';
+    protected $table = 'returns_header';
     protected $fillable = [
         'returns_status',
         'returns_status_1',
@@ -34,11 +34,12 @@ class Warranty extends Model
         'branch',
         'branch_dropoff',
         'created_at',
+        'stores_id',
         'transaction_type'
     ];
 
     public function lines() : HasMany{
-        return $this->hasMany(WarrantyLine::class, 'returns_header_id', 'id');
+        return $this->hasMany(WarrantyOnlineBackendLine::class, 'returns_header_id', 'id');
     }
 
     protected static function boot()
@@ -47,8 +48,8 @@ class Warranty extends Model
 
         static::creating(function ($model) {
             // Get the most recent reference number or start at 1 if none exists
-            $latestRef = Warranty::selectRaw('SUBSTR(return_reference_no, 1, 8) AS refno')
-                ->orderByDesc('refno')
+            $latestRef = WarrantyOnlineBackend::selectRaw('SUBSTR(return_reference_no, 1, 8) AS refno')
+                ->orderBy('refno','DESC')
                 ->first();
 
             $numeric = $latestRef ? (int) $latestRef->refno + 1 : 1;
@@ -57,14 +58,14 @@ class Warranty extends Model
             $i = 0;
             do {
                 $numberCode = str_pad($numeric + $i, 8, "0", STR_PAD_LEFT);
-                $trackingNumber = $numberCode . 'R';
+                $trackingNumber = $numberCode . 'E';
                 $i++;
 
                 // Check for existence in both tables
-                $existsInReturnsBackend = WarrantyBackend::whereRaw('SUBSTR(return_reference_no, 1, 8) = ?', [$numberCode])
+                $existsInReturnsBackend = WarrantyOnline::whereRaw('SUBSTR(return_reference_no, 1, 8) = ?', [$numberCode])
                     ->exists();
 
-                $existsInReturnsFrontend = Warranty::whereRaw('SUBSTR(return_reference_no, 1, 8) = ?', [$numberCode])
+                $existsInReturnsFrontend = WarrantyOnlineBackend::whereRaw('SUBSTR(return_reference_no, 1, 8) = ?', [$numberCode])
                     ->exists();
 
             } while ($existsInReturnsBackend || $existsInReturnsFrontend);

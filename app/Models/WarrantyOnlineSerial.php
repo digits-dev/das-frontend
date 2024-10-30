@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WarrantyDistributionSerial extends Model
+class WarrantyOnlineSerial extends Model
 {
     use HasFactory;
 

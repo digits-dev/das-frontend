@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
     use HasFactory;
+
+    protected $connection = 'backend';
+    protected $table = 'digits_imfs';
+
 }

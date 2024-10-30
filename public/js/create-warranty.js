@@ -322,3 +322,10 @@ function validateField({ id, error, condition, validate, invalidMessage, customM
         $(error).attr("hidden", true).html("");
     }
 }
+
+function removeSpecials(evt) {
+    const input = $("#problem_details_other");
+    const pattern = /[^\u0000-\u007F ]+/g;
+
+    input.val(input.val().replace(pattern, ""));
+}
