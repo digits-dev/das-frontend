@@ -173,7 +173,7 @@ class WarrantyRequestController extends Controller
             }
         }
         $problemDetails = rtrim($problemDetails, ', ');
-        $status = 0;
+        $status = 1;
         if($request->purchase_location == Channel::RETAIL) {
             $status = 1;
             // Check if 'store_drop_off' is set and contains 'SERVICE' with brand conditions
