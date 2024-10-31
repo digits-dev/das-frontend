@@ -31,6 +31,12 @@ class StoreMaster extends Model
             ->where('store_status', 'ACTIVE');
     }
 
+    public function scopeGetByStoreDropOff($query, $storeName){
+        return $query->where('store_name', $storeName)
+            ->where('channels_id', 6)//retail
+            ->where('store_status', 'ACTIVE');
+    }
+
     public function backend():BelongsTo{
         return $this->belongsTo(StoreDropOff::class,'id','stores_frontend_id');
     }

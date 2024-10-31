@@ -10,6 +10,8 @@ use App\Models\PaymentMode;
 use App\Models\ProblemDetail;
 use App\Models\Province;
 use App\Models\StoreDropOff;
+use App\Models\StoreMaster;
+use App\Models\StoreMasterBackend;
 use App\Models\Warranty;
 use App\Models\WarrantyBackend;
 use App\Models\WarrantyOnline;
@@ -85,7 +87,7 @@ class WarrantyRequestController extends Controller
     {
 
         $rules = [
-            'digits_code' => 'required', // 9-digit numeric code
+            'digits_code' => 'nullable|string', // 9-digit numeric code
             'item_desc' => 'required|string|max:255',
             'brand' => 'required|string|max:50',
             'serial_number' => 'nullable|string|max:50',
@@ -125,6 +127,7 @@ class WarrantyRequestController extends Controller
         }
 
         $transaction_type = 0;
+        $status = 1;
 
         $channelName = Cache::remember('channel'.$request->purchase_location, now()->addDays(1), function() use($request){
             return Channel::getChannelById($request->purchase_location)->channel_name;
@@ -173,7 +176,18 @@ class WarrantyRequestController extends Controller
             }
         }
         $problemDetails = rtrim($problemDetails, ', ');
-        $status = 1;
+
+        $frontEndStoreKey = "fStore{$request->purchase_location}{$request->store_drop_off}";
+        $frontEndStore = Cache::remember($frontEndStoreKey, now()->addDays(1), function() use($request){
+            return StoreMaster::getByStoreDropOff($request->store_drop_off)->first();
+        });
+
+        $storeId = Cache::remember($frontEndStoreKey.$request->branch_dropoff, now()->addDays(1), function() use($request, $frontEndStore){
+            return StoreMasterBackend::getCustomerLocationByBranchId($frontEndStore->id, $request->branch_dropoff)->first();
+        });
+
+        Log::debug(json_encode($storeId));
+
         if($request->purchase_location == Channel::RETAIL) {
             $status = 1;
             // Check if 'store_drop_off' is set and contains 'SERVICE' with brand conditions
@@ -214,6 +228,7 @@ class WarrantyRequestController extends Controller
             'branch'                => $request->branch,
             'branch_dropoff'        => $request->branch_dropoff,
             'created_at'            => now(),
+            'stores_id'             => ($storeId) ? $storeId->id : 0,//update lookp
             'transaction_type'      => $transaction_type
         ];
 

@@ -46,6 +46,14 @@ class StoreDropOff extends Model
             ->orderBy('branch_id', 'ASC');
     }
 
+    public function scopeGetCustomerLocationByBranchId($query, $storeFrontId, $branch){
+        return $query->where('branch_id', $branch)
+            ->where('stores_frontend_id', $storeFrontId)
+            ->where('store_status', 'ACTIVE')
+            ->where('store_dropoff_privilege', 'YES')
+            ->orderBy('branch_id', 'ASC');
+    }
+
     public function frontend():BelongsTo{
         return $this->belongsTo(StoreMaster::class,'stores_frontend_id','id');
     }
