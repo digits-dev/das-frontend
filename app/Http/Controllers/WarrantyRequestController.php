@@ -256,6 +256,7 @@ class WarrantyRequestController extends Controller
                     'order_no' => $dataHeader['order_no'],
                     'email_address' => $dataHeader['email_address'],
                     'contact_no' => $dataHeader['contact_no'],
+                    'returns_status_1' => $dataHeader['turns_status_1']
                 ], $dataHeader);
 
                 $warrantyBackendLine = $warrantyBackend->lines()->firstOrCreate([
@@ -281,6 +282,7 @@ class WarrantyRequestController extends Controller
                     'order_no' => $dataHeader['order_no'],
                     'email_address' => $dataHeader['email_address'],
                     'contact_no' => $dataHeader['contact_no'],
+                    'returns_status_1' => $dataHeader['turns_status_1']
                 ], $dataHeader);
 
                 $warrantyLine = $warranty->lines()->firstOrCreate([
@@ -327,6 +329,7 @@ class WarrantyRequestController extends Controller
                     'order_no' => $dataHeader['order_no'],
                     'email_address' => $dataHeader['email_address'],
                     'contact_no' => $dataHeader['contact_no'],
+                    'returns_status_1' => $dataHeader['turns_status_1']
                 ], $dataHeader);
 
                 $warrantyOnlineBackendLine = $warrantyOnlineBackend->lines()->firstOrCreate([
@@ -350,6 +353,7 @@ class WarrantyRequestController extends Controller
                     'order_no' => $dataHeader['order_no'],
                     'email_address' => $dataHeader['email_address'],
                     'contact_no' => $dataHeader['contact_no'],
+                    'returns_status_1' => $dataHeader['turns_status_1']
                 ], $dataHeader);
 
                 $warrantyOnlLine = $warrantyOnl->lines()->firstOrCreate([
