@@ -128,6 +128,7 @@ class WarrantyRequestController extends Controller
 
         $transaction_type = 0;
         $status = 1;
+        $storeId = 0;
 
         $channelName = Cache::remember('channel'.$request->purchase_location, now()->addDays(1), function() use($request){
             return Channel::getChannelById($request->purchase_location)->channel_name;
@@ -177,16 +178,16 @@ class WarrantyRequestController extends Controller
         }
         $problemDetails = rtrim($problemDetails, ', ');
 
-        $frontEndStoreKey = "fStore{$request->purchase_location}{$request->store_drop_off}";
-        $frontEndStore = Cache::remember($frontEndStoreKey, now()->addDays(1), function() use($request){
-            return StoreMaster::getByStoreDropOff($request->store_drop_off)->first();
-        });
+        if($request->branch_dropoff && $request->store_drop_off){
+            $frontEndStoreKey = "fStore{$request->purchase_location}{$request->store_drop_off}";
+            $frontEndStore = Cache::remember($frontEndStoreKey, now()->addDays(1), function() use($request){
+                return StoreMaster::getByStoreDropOff($request->store_drop_off)->first();
+            });
 
-        $storeId = Cache::remember($frontEndStoreKey.$request->branch_dropoff, now()->addDays(1), function() use($request, $frontEndStore){
-            return StoreMasterBackend::getCustomerLocationByBranchId($frontEndStore->id, $request->branch_dropoff)->first();
-        });
-
-        Log::debug(json_encode($storeId));
+            $storeId = Cache::remember($frontEndStoreKey.$request->branch_dropoff, now()->addDays(1), function() use($request, $frontEndStore){
+                return StoreMasterBackend::getCustomerLocationByBranchId($frontEndStore->id, $request->branch_dropoff)->first();
+            });
+        }
 
         if($request->purchase_location == Channel::RETAIL) {
             $status = 1;
