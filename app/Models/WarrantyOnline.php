@@ -33,7 +33,6 @@ class WarrantyOnline extends Model
         'branch',
         'branch_dropoff',
         'created_at',
-        'stores_id',
         'transaction_type'
     ];
 
