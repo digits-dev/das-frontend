@@ -212,12 +212,12 @@ class WarrantyRequestController extends Controller
             'returns_status'   		=> 1,
             'returns_status_1'   	=> $status,
             'purchase_location'     => $channelName,
-            'store' 			    => $request->store,
-            'customer_last_name'    => $request->lastname,
-            'customer_first_name'   => $request->firstname,
-            'address'               => $address,
-            'email_address'         => $request->email_address,
-            'contact_no'            => $request->contact_number,
+            'store' 			    => trim($request->store),
+            'customer_last_name'    => trim($request->lastname),
+            'customer_first_name'   => trim($request->firstname),
+            'address'               => trim($address),
+            'email_address'         => trim($request->email_address),
+            'contact_no'            => trim($request->contact_number),
             'order_no'              => $request->order_no,
             'purchase_date'         => $request->purchase_date,
             'mode_of_payment'       => $modeOfPayment,
@@ -225,9 +225,9 @@ class WarrantyRequestController extends Controller
             'items_included'        => $includedItems,
             'items_included_others' => $request->items_included_others,
             'mode_of_return'        => $request->mode_of_return,
-            'store_dropoff'         => $request->store_drop_off,
-            'branch'                => $request->branch,
-            'branch_dropoff'        => $request->branch_dropoff,
+            'store_dropoff'         => trim($request->store_drop_off),
+            'branch'                => trim($request->branch),
+            'branch_dropoff'        => trim($request->branch_dropoff),
             'created_at'            => now(),
             'stores_id'             => ($storeId) ? $storeId->id : 0,//update lookp
             'transaction_type'      => $transaction_type
@@ -266,10 +266,10 @@ class WarrantyRequestController extends Controller
 
                 if(!empty($request->serial_number)){
                     $warrantyBackendLine->serials()->firstOrCreate([
-                        'serial_number' => $request->serial_number
+                        'serial_number' => trim($request->serial_number)
                     ],[
                         'returns_header_id' => $warrantyBackend->id,
-                        'serial_number' => $request->serial_number,
+                        'serial_number' => trim($request->serial_number),
                         'created_at' => now()
                     ]);
                 }
@@ -293,10 +293,10 @@ class WarrantyRequestController extends Controller
 
                 if(!empty($request->serial_number)){
                     $warrantyLine->serials()->firstOrCreate([
-                        'serial_number' => $request->serial_number
+                        'serial_number' => trim($request->serial_number)
                     ],[
                         'returns_header_id' => $warranty->id,
-                        'serial_number' => $request->serial_number,
+                        'serial_number' => trim($request->serial_number),
                         'created_at' => now()
                     ]);
                 }
@@ -340,10 +340,10 @@ class WarrantyRequestController extends Controller
                 ], $dataLines);
 
                 $warrantyOnlineBackendLine->serials()->firstOrCreate([
-                    'serial_number' => $request->serial_number
+                    'serial_number' => trim($request->serial_number)
                 ],[
                     'returns_header_id' => $warrantyOnlineBackend->id,
-                    'serial_number' => $request->serial_number,
+                    'serial_number' => trim($request->serial_number),
                     'created_at' => now()
                 ]);
 
@@ -365,10 +365,10 @@ class WarrantyRequestController extends Controller
                 ], $dataLines);
 
                 $warrantyOnlLine->serials()->firstOrCreate([
-                    'serial_number' => $request->serial_number
+                    'serial_number' => trim($request->serial_number)
                 ],[
                     'returns_header_id' => $warrantyOnl->id,
-                    'serial_number' => $request->serial_number,
+                    'serial_number' => trim($request->serial_number),
                     'created_at' => now()
                 ]);
 
