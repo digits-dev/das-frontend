@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Channel;
 use App\Models\City;
 use App\Models\PaymentMode;
 use App\Models\StoreDropOff;
@@ -56,12 +57,14 @@ class LookupController extends Controller
                 return StoreMaster::getByName($request->location, $request->drop_off_store)->select('id')->first();
             });
 
-            if($storeId){
+            if($storeId && $request->location == Channel::RETAIL){
                 $storeBranchDrop = StoreDropOff::getBranchDropOffById($storeId->id)->get();
                 return response()->json($storeBranchDrop);
             }
 
-            $storeBranchDrop = StoreDropOff::getBranchDropOffById($storeId->id)->where('store_dropoff_privilege', 'YES')->get();
+            $storeBranchDrop = StoreDropOff::getBranchDropOffById($storeId->id)
+                ->where('store_dropoff_privilege', 'YES')->get();
+
             return response()->json($storeBranchDrop);
         }
 
