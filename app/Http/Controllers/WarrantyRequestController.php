@@ -111,7 +111,7 @@ class WarrantyRequestController extends Controller
             'email_address' => 'required|email|max:100',
             'contact_number' => 'required|regex:/^09\d{9}$/',
             'order_no' => 'required|string|max:50',
-            'purchase_date' => 'required|date|before:today',
+            'purchase_date' => 'required|date|before_or_equal:today',
             'payment' => 'required|array|min:1',
             'purchase_amount' => 'required|numeric|min:0',
             // 'bankname' => 'nullable|required_if:mode_of_return,HOME PICK-UP|string|max:100',
